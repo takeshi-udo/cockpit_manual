@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CR-V Owner's Manual</title>
+  <style>
+    :root {
+      --honda-red: #cc0000;
+      --bg-gray: #f4f5f7;
+      --border-color: #e0e0e0;
+      --text-main: #333333;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-gray);
+      color: var(--text-main);
+      padding-top: 56px;
+    }
+
+    /* ヘッダー */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 1000;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .header-title {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .car-model {
+      font-size: 12px;
+      background: #333;
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* サイドナビゲーション */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 1001;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 280px;
+      height: 100%;
+      background: #fff;
+      z-index: 1002;
+      transition: left 0.3s ease;
+      overflow-y: auto;
+    }
+
+    .drawer.open {
+      left: 0;
+    }
+
+    .drawer-header {
+      background: var(--honda-red);
+      color: white;
+      padding: 16px;
+      font-weight: bold;
+    }
+
+    .nav-list {
+      list-style: none;
+    }
+
+    .nav-item {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-item a {
+      display: block;
+      padding: 14px 16px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .nav-item a:active {
+      background: #eee;
+    }
+
+    /* メインコンテンツ */
+    .container {
+      display: block;
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .section-card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      border-left: 4px solid var(--honda-red);
+      padding-left: 8px;
+      margin-bottom: 16px;
+    }
+
+    /* アコーディオン */
+    .accordion-item {
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      background: #fafafa;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .accordion-header::after {
+      content: "＋";
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--honda-red);
+    }
+
+    .accordion-item.active .accordion-header::after {
+      content: "－";
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 14px 16px;
+      background: #fff;
+      font-size: 14px;
+      line-height: 1.6;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .accordion-item.active .accordion-content {
+      display: block;
+    }
+
+    /* 文中に埋め込むアイコン用のスタイル */
+    .inline-icon {
+      height: 1.2em;
+      width: auto;
+      vertical-align: -0.15em;
+      margin: 0 2px;
+    }
+
+    /* 画像用ダミー領域 */
+    .img-placeholder {
+      width: 100%;
+      height: 140px;
+      background: #eaeaea;
+      border: 1px dashed #ccc;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+      font-size: 12px;
+      margin: 10px 0;
+    }
+
+    /* 注意事項ボックス */
+    .alert-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 10px;
+      font-size: 13px;
+      margin-bottom: 10px;
+      border-radius: 2px;
+    }
+
+    .step-list {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+
+    .step-list li {
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header>
+    <button class="menu-btn" id="menuBtn">☰</button>
+    <div class="header-title">取扱説明書</div>
+    <span class="car-model">CR-V 2026</span>
+  </header>
+
+  <!-- スライドメニュー -->
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <div class="drawer-header">CR-V メニュー</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="#" onclick="showDummy('安全なドライブ')">安全なドライブ</a></li>
+      <li class="nav-item"><a href="#" onclick="showDummy('インストルメントパネル')">計器類・表示</a></li>
+      <li class="nav-item"><a href="#" onclick="showDummy('各部の操作')">各部の操作</a></li>
+      <li class="nav-item"><a href="#honda-sensing" onclick="closeMenu()">Honda SENSING（運転支援システム）</a></li>
+      <li class="nav-item"><a href="#brake-hold" onclick="closeMenu()">ブレーキシステム</a></li>
+      <li class="nav-item"><a href="#" onclick="showDummy('マルチメディア・ナビ')">ナビ・オーディオ</a></li>
+      <li class="nav-item"><a href="#" onclick="showDummy('万一のとき')">万一のとき</a></li>
+      <li class="nav-item"><a href="#" onclick="showDummy('お手入れ・メンテナンス')">お手入れ・メンテナンス</a></li>
+    </ul>
+  </nav>
+
+  <!-- メインコンテンツ -->
+  <div class="container">
+
+    <!-- Honda SENSING セクション -->
+    <div class="section-card" id="honda-sensing">
+      <div class="section-title">渋滞追従機能付ACC</div>
+
+      <!-- 1. ACCの起動方法 -->
+      <div class="accordion-item">
+        <div class="accordion-header">ACCの起動・セット方法</div>
+        <div class="accordion-content">
+          <div class="img-placeholder">【ステアリングスイッチ配置図（ACC）】</div>
+          <ol class="step-list">
+            <li>希望の車速（約30km/h以上）まで加速・減速します。</li>
+            <li>
+              <b>「<img src="acc_icon.svg" alt="ACC" class="inline-icon"> ACC」スイッチ</b>を下に押し下げて手を離すと、現在の車速でACCがセットされます。
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 2. ACCの車間調整 -->
+      <div class="accordion-item">
+        <div class="accordion-header">ACCの車間距離調整</div>
+        <div class="accordion-content">
+          <div class="img-placeholder">【車間距離切換スイッチ・メーター表示図】</div>
+          <p>
+            ステアリングの<b>「<img src="distance_icon.svg" alt="車間距離" class="inline-icon"> 車間距離切換スイッチ」</b>を押すごとに、先行車との設定車速時の車間距離（4段階）を切り替えることができます。
+          </p>
+          <ul class="step-list" style="list-style-type: disc;">
+            <li><b>最長</b>（ゲージ4段）</li>
+            <li><b>長</b>（ゲージ3段）</li>
+            <li><b>中</b>（ゲージ2段）</li>
+            <li><b>短</b>（ゲージ1段）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ブレーキシステム セクション -->
+    <div class="section-card" id="brake-hold">
+      <div class="section-title">ブレーキシステム</div>
+
+      <!-- 3. ブレーキホールドの使い方 -->
+      <div class="accordion-item">
+        <div class="accordion-header">オートマチックブレーキホールドの使い方</div>
+        <div class="accordion-content">
+          <div class="alert-box">
+            <b>ご注意：</b> 信号待ちなどの一時的な停車用の機能です。駐車するときや急な坂道では使用しないでください。
+          </div>
+          <div class="img-placeholder">【センターディスプレイ・画面操作図】</div>
+          
+          <p><b>■ 作動方法（システムON）</b></p>
+          <ol class="step-list">
+            <li>パワーシステムを起動します。</li>
+            <li>
+              センターディスプレイでビークルコントロールパネル<b>「<img src="car_icon.svg" alt="車両" class="inline-icon">」</b>を選択してください。
+            </li>
+            <li>「運転支援」を選択してください。</li>
+            <li>「ブレーキホールド」のボタンをタップします。</li>
+            <li>Dレンジ等でブレーキペダルを踏んで完全停車すると、自動でブレーキが保持されます。</li>
+          </ol>
+
+          <br>
+          <p><b>■ 解除方法</b></p>
+          <ul class="step-list" style="list-style-type: disc;">
+            <li><b>アクセルペダルを踏む：</b> 自動で解除され発進します。</li>
+            <li><b>システムOFF：</b> 再度画面から操作するか、設定を解除します。</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // ドロワーメニューの制御
+    const menuBtn = document.getElementById('menuBtn');
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('overlay');
+
+    function openMenu() {
+      drawer.classList.add('open');
+      overlay.style.display = 'block';
+    }
+
+    function closeMenu() {
+      drawer.classList.remove('open');
+      overlay.style.display = 'none';
+    }
+
+    menuBtn.addEventListener('click', openMenu);
+    overlay.addEventListener('click', closeMenu);
+
+    // アコーディオンの制御（開閉イベント）
+    document.addEventListener('DOMContentLoaded', () => {
+      const accordionHeaders = document.querySelectorAll('.accordion-header');
+      accordionHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+          const item = header.closest('.accordion-item');
+          if (item) {
+            item.classList.toggle('active');
+          }
+        });
+      });
+    });
+
+    // ダミーリンク用の通知
+    function showDummy(title) {
+      alert(`「${title}」のページはダミーです。\n（後からコンテンツを追加できます）`);
+      closeMenu();
+    }
+  </script>
+</body>
+</html>
